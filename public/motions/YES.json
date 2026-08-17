@@ -1,0 +1,15 @@
+{
+  "sign": "YES",
+  "status": "ready",
+  "duration": 1.4,
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep",
+  "notes": "TECHNICAL ANIMATION TEST ONLY - a head nod, used to prove the pipeline drives the neck/head chain, not just the arm. Not Auslan.",
+  "frames": [
+    { "time": 0, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_RAISE": 0 } },
+    { "time": 0.35, "bones": { "Neck": [0.12, 0, 0], "Head": [0.3, 0, 0] }, "expressions": { "BROW_RAISE": 0.3 } },
+    { "time": 0.7, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] } },
+    { "time": 1.05, "bones": { "Neck": [0.12, 0, 0], "Head": [0.3, 0, 0] } },
+    { "time": 1.4, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_RAISE": 0 } }
+  ]
+}

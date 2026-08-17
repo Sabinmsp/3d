@@ -1,0 +1,14 @@
+{
+  "sign": "HAPPY",
+  "status": "ready",
+  "duration": 1.6,
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep",
+  "notes": "TECHNICAL ANIMATION TEST ONLY - an expression-only clip with no bone motion at all, to prove the morph-target track works independently of the skeleton. Not a validated Auslan sign or facial grammar marker.",
+  "frames": [
+    { "time": 0, "bones": {}, "expressions": { "BROW_RAISE": 0, "MOUTH_SMILE": 0, "EYE_WIDE": 0 } },
+    { "time": 0.5, "bones": {}, "expressions": { "BROW_RAISE": 0.5, "MOUTH_SMILE": 0.8, "EYE_WIDE": 0.2 } },
+    { "time": 1.2, "bones": {}, "expressions": { "BROW_RAISE": 0.5, "MOUTH_SMILE": 0.8, "EYE_WIDE": 0.2 } },
+    { "time": 1.6, "bones": {}, "expressions": { "BROW_RAISE": 0, "MOUTH_SMILE": 0, "EYE_WIDE": 0 } }
+  ]
+}

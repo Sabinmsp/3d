@@ -1,0 +1,29 @@
+{
+  "sign": "STOP",
+  "status": "ready",
+  "duration": 1.5,
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep",
+  "notes": "TECHNICAL ANIMATION TEST ONLY - arm raises forward and holds, palm-forward-ish. Not a validated Auslan sign.",
+  "frames": [
+    {
+      "time": 0,
+      "bones": { "RightShoulder": [0, 0, 0], "RightUpperArm": [0, 0, 0], "RightForeArm": [0, 0, 0] },
+      "expressions": { "BROW_RAISE": 0 }
+    },
+    {
+      "time": 0.4,
+      "bones": { "RightShoulder": [0, 0, -0.05], "RightUpperArm": [0.05, 0, -1.5], "RightForeArm": [0, 0, -0.15] },
+      "expressions": { "BROW_RAISE": 0.4 }
+    },
+    {
+      "time": 1.0,
+      "bones": { "RightShoulder": [0, 0, -0.05], "RightUpperArm": [0.05, 0, -1.5], "RightForeArm": [0, 0, -0.15] }
+    },
+    {
+      "time": 1.5,
+      "bones": { "RightShoulder": [0, 0, 0], "RightUpperArm": [0, 0, 0], "RightForeArm": [0, 0, 0] },
+      "expressions": { "BROW_RAISE": 0 }
+    }
+  ]
+}

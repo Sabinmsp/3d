@@ -1,0 +1,16 @@
+{
+  "signs": [
+    { "sign": "HI", "status": "ready", "label": "Wave + smile (not a real sign)" },
+    { "sign": "BYE", "status": "ready", "label": "Small wave (not a real sign)" },
+    { "sign": "YES", "status": "ready", "label": "Head nod (not a real sign)" },
+    { "sign": "NO", "status": "ready", "label": "Head shake (not a real sign)" },
+    { "sign": "THANKS", "status": "ready", "label": "Hand to face, forward (not a real sign)" },
+    { "sign": "STOP", "status": "ready", "label": "Arm raised, palm forward (not a real sign)" },
+    { "sign": "COME", "status": "ready", "label": "Beckoning curl (not a real sign)" },
+    { "sign": "POINT", "status": "ready", "label": "Arm extended forward (not a real sign)" },
+    { "sign": "THINKING", "status": "ready", "label": "Hand to chin, pensive (not a real sign)" },
+    { "sign": "HAPPY", "status": "ready", "label": "Expression only, no bones (not a real sign)" },
+    { "sign": "PAY", "status": "placeholder", "label": "Placeholder - no data" },
+    { "sign": "FRIDAY", "status": "placeholder", "label": "Placeholder - no data" }
+  ]
+}

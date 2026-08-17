@@ -1,0 +1,16 @@
+{
+  "sign": "NO",
+  "status": "ready",
+  "duration": 1.6,
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep",
+  "notes": "TECHNICAL ANIMATION TEST ONLY - a head shake, used to prove yaw rotation on the neck/head chain. Not Auslan.",
+  "frames": [
+    { "time": 0, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_DROP": 0, "MOUTH_FROWN": 0 } },
+    { "time": 0.3, "bones": { "Neck": [0, 0.3, 0], "Head": [0, 0.35, 0] }, "expressions": { "BROW_DROP": 0.4, "MOUTH_FROWN": 0.3 } },
+    { "time": 0.6, "bones": { "Neck": [0, -0.3, 0], "Head": [0, -0.35, 0] } },
+    { "time": 0.9, "bones": { "Neck": [0, 0.3, 0], "Head": [0, 0.35, 0] } },
+    { "time": 1.2, "bones": { "Neck": [0, -0.3, 0], "Head": [0, -0.35, 0] } },
+    { "time": 1.6, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_DROP": 0, "MOUTH_FROWN": 0 } }
+  ]
+}

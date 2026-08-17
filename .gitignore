@@ -1,0 +1,18 @@
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+.env*
+!.env.example
+
+.DS_Store
+*.log
+
+# Avatar models are large binaries - keep them out of git unless you decide otherwise.
+# Delete this rule if you want to commit the rigged avatar with the repo.
+public/models/*.glb
+public/models/*.gltf
+public/models/*.bin

@@ -1,0 +1,12 @@
+{
+  "sign": "FRIDAY",
+  "status": "placeholder",
+  "duration": 0,
+  "notes": "Placeholder only - no motion data yet. This file exists to prove that the lookup path finds a sign without any per-sign code. Real frames must come from validated Auslan motion capture or a trained motion model, produced with Deaf community involvement.",
+  "frames": [
+    {
+      "time": 0,
+      "bones": {}
+    }
+  ]
+}
