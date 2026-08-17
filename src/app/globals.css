@@ -144,6 +144,11 @@ button.ghost {
   flex: 0 0 auto;
 }
 
+.checks {
+  display: flex;
+  gap: 1rem;
+}
+
 .check {
   display: flex;
   align-items: center;
@@ -355,4 +360,90 @@ button.ghost {
   color: var(--muted);
   font-size: 0.72rem;
   pointer-events: none;
+}
+
+/* --- captions / subtitles --- */
+
+.captions {
+  position: absolute;
+  left: 50%;
+  bottom: 3.5rem;
+  transform: translateX(-50%);
+  max-width: min(90%, 46rem);
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  /* Near-opaque so text stays legible over any part of the 3D scene. */
+  background: rgba(3, 7, 14, 0.88);
+  border: 1px solid var(--line);
+  text-align: center;
+  pointer-events: none;
+}
+
+.caption-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25rem 0.85rem;
+  margin: 0;
+  /* Subtitle-scale: readable at a glance from across a room. */
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.caption-token {
+  color: #64748b;
+  transition: color 120ms linear;
+}
+
+/* The sign currently being performed. */
+.caption-playing {
+  color: #f8fafc;
+  text-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
+}
+
+.caption-done {
+  color: #94a3b8;
+}
+
+.caption-placeholder {
+  color: var(--warn);
+}
+
+.caption-missing,
+.caption-unplayable {
+  color: var(--error);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* "no data" / "placeholder" markers - never let a caption imply the avatar
+   signed something it actually skipped. */
+.caption-note {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.caption-source {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 800px) {
+  .caption-line {
+    font-size: 1.15rem;
+  }
 }

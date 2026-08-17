@@ -7,9 +7,13 @@ import type { AvatarSource } from "./AvatarStage";
 export function MotionPanel({
   avatarSource,
   avatarError,
+  captions,
+  onCaptionsChange,
 }: {
   avatarSource: AvatarSource;
   avatarError: string | null;
+  captions: boolean;
+  onCaptionsChange: (on: boolean) => void;
 }) {
   const engine = useMotionEngine();
   const state = useEngineState();
@@ -60,17 +64,28 @@ export function MotionPanel({
           </button>
         </div>
 
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={loop}
-            onChange={(event) => {
-              setLoop(event.target.checked);
-              engine.setLoop(event.target.checked);
-            }}
-          />
-          Loop
-        </label>
+        <div className="checks">
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={loop}
+              onChange={(event) => {
+                setLoop(event.target.checked);
+                engine.setLoop(event.target.checked);
+              }}
+            />
+            Loop
+          </label>
+
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={captions}
+              onChange={(event) => onCaptionsChange(event.target.checked)}
+            />
+            Captions
+          </label>
+        </div>
       </form>
 
       <div className="quick">

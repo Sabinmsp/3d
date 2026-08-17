@@ -105,6 +105,7 @@ src/
 
   components/
     App.tsx               layout
+    CaptionBar.tsx        subtitle track overlaying the scene
     AvatarStage.tsx       Canvas, lights, camera, OrbitControls, per-frame tick
     GltfAvatar.tsx        loads avatar.glb, normalises scale, attaches the rig
     PlaceholderAvatar.tsx fallback figure with a real, correctly-named joint tree
@@ -156,6 +157,23 @@ In the UI, an unresolved queue token doesn't stop the sequence — the app plays
 what it can, marks each token `done` / `placeholder` / `missing` in the progress
 strip, and moves on. Playing a single word, e.g. `HI`, is just a one-token
 sequence.
+
+## Captions
+
+A subtitle track renders over the scene (toggle: **Captions**), showing the gloss
+tokens with the one currently being signed highlighted. It is driven by the same
+engine state as playback, so it cannot drift out of sync with the avatar.
+
+Tokens the avatar did **not** actually sign are marked rather than silently shown
+as if they played — `placeholder` in amber, `no data` struck through in red. That
+distinction matters: a caption reading `PAY` under a motionless avatar would
+otherwise imply a sign was produced when nothing happened.
+
+The bar is a `role="status"` / `aria-live="polite"` region, so screen readers
+announce each token as it plays.
+
+Captions display **gloss tokens, not a translation** — labelled as such in the
+bar itself, for the same reason described above.
 
 ## Motion data format
 
