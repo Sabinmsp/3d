@@ -43,9 +43,12 @@ npm run dev
 Open http://localhost:3000, then press **Play Motion**. Drag to orbit the camera
 and inspect the arm from any angle; scroll to zoom.
 
-With no avatar file present you get a placeholder stick figure — see
-[`public/models/README.md`](public/models/README.md) for how to drop in a real
-rigged human.
+The rigged avatar (`public/models/avatar.glb`) is committed, so this works on a
+fresh clone with no extra setup. It is 48 MiB and takes ~20 seconds to load and
+decode on first paint — the panel reads `0 bones` until it finishes. To swap in a
+different human, or if the file is missing, see
+[`public/models/README.md`](public/models/README.md); the app falls back to a
+built-in placeholder figure and says so in the panel.
 
 ## The pipeline
 
@@ -82,7 +85,8 @@ public/
     FRIDAY.json           placeholder - no motion data
     manifest.json         list of known signs, drives the quick-pick chips
   models/
-    README.md             >>> PUT avatar.glb HERE <<<
+    avatar.glb            the rigged human (committed, 48 MiB)
+    README.md             how to swap in a different model
 
 src/
   motion/                 pure TypeScript - no React, no scene graph

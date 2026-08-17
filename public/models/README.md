@@ -1,18 +1,25 @@
-# Put the rigged avatar here
+# The rigged avatar
 
-Save your rigged human as:
+**`avatar.glb` is committed to this repo**, so a fresh clone renders the real
+human with no extra setup — no download step, no Git LFS, no config.
+
+## Replacing it
+
+Save any other rigged human over the same path:
 
 ```
 public/models/avatar.glb
 ```
 
-That exact path and filename. Reload the page and the app switches from the
-placeholder figure to your model automatically — there is no code change and no
-config to edit. If the file is missing or fails to parse, the app falls back to
-the placeholder and says so in the panel.
+That exact path and filename. Reload the page and the app picks it up
+automatically — there is no code change and no config to edit. If the file is
+missing or fails to parse, the app falls back to the built-in placeholder figure
+and says so in the panel.
 
-`.glb` files are gitignored (see `/.gitignore`) so the repo stays small. Delete
-that rule if you want the avatar committed.
+Other `.glb`/`.gltf`/`.bin` files in this folder stay gitignored; only
+`avatar.glb` is tracked. At 48 MiB it sits under GitHub's 50 MiB warning
+threshold — if you swap in a noticeably larger model, use Git LFS rather than
+committing it directly, since git history is permanent.
 
 ## What the model needs
 

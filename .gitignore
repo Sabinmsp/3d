@@ -11,8 +11,11 @@ next-env.d.ts
 .DS_Store
 *.log
 
-# Avatar models are large binaries - keep them out of git unless you decide otherwise.
-# Delete this rule if you want to commit the rigged avatar with the repo.
+# Avatar models are large binaries. avatar.glb is committed deliberately so the
+# repo works on clone with no extra setup - it is 48 MiB, under GitHub's 50 MiB
+# warning threshold. Any OTHER model dropped in here stays out of git; if one
+# ever exceeds ~50 MiB, use Git LFS rather than committing it directly.
 public/models/*.glb
 public/models/*.gltf
 public/models/*.bin
+!public/models/avatar.glb
