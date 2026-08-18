@@ -328,6 +328,51 @@ button.ghost {
   font-size: 0.72rem;
 }
 
+/* --- dev bone tester --- */
+
+.tester select {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.5rem;
+  background: #0a1120;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+}
+
+.slider {
+  display: block;
+  margin-bottom: 0.4rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.slider span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.slider em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.tester button {
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
 /* --- 3D stage --- */
 
 .stage {

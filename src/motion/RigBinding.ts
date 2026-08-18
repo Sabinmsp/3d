@@ -60,13 +60,14 @@ export class RigBinding {
     // Arms are AIMED rather than offset by fixed angles - see neutralPose.ts for
     // why. Parents first, and the world matrix is refreshed between joints so
     // each child aims from its parent's already-posed orientation.
-    for (const bone of AIMED_BONES) {
+    for (const [bone, continuesTo] of AIMED_BONES) {
       const bound = this.bones.get(bone);
+      const child = this.bones.get(continuesTo);
       const target = neutralTargetFor(bone);
       if (!bound || !target) continue;
 
       bound.node.updateMatrixWorld(true);
-      const aimed = aimBone(bound.node, target);
+      const aimed = aimBone(bound.node, child?.node, target);
       bound.restQuaternion.copy(aimed);
       bound.node.quaternion.copy(aimed);
       bound.node.updateMatrixWorld(true);

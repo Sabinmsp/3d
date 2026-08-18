@@ -320,6 +320,11 @@ export class MotionEngine {
     this.controller.loop = loop;
   }
 
+  /** The bound rig, for the dev bone tester. */
+  getRig(): RigBinding | null {
+    return this.controller.getRig();
+  }
+
   /** Driven by the render loop. */
   update(delta: number): void {
     this.controller.update(delta);

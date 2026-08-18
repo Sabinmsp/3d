@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useEngineState, useMotionEngine } from "@/react/MotionEngineProvider";
 import { CANONICAL_EXPRESSIONS } from "@/motion/types";
+import { BoneTester } from "./BoneTester";
 import type { AvatarSource } from "./AvatarStage";
 
 export function MotionPanel({
@@ -191,6 +192,8 @@ export function MotionPanel({
           <p className="hint">No rig attached yet.</p>
         )}
       </details>
+
+      {process.env.NODE_ENV !== "production" && <BoneTester />}
 
       <details className="rig">
         <summary>

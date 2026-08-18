@@ -48,24 +48,38 @@ for (const side of ["Right", "Left"] as const) {
   }
 }
 
-/** Bones the neutral posture aims. Order matters: parents before children. */
-export const AIMED_BONES: CanonicalBone[] = [
-  "RightUpperArm",
-  "RightForeArm",
-  "LeftUpperArm",
-  "LeftForeArm",
+/**
+ * Bones the neutral posture aims, each paired with the joint that continues the
+ * limb. Order matters: parents before children.
+ *
+ * The child is named explicitly rather than taken as "the first child", because
+ * on this rig it is not. Character Creator limbs carry helper joints -
+ * `CC_Base_R_Forearm` has `ElbowShareBone` and `ForearmTwist01` alongside
+ * `Hand` - and picking the first one measured the forearm's direction as a
+ * diagonal off toward the elbow helper instead of down the arm, so the whole
+ * limb was aimed along a bogus axis.
+ */
+export const AIMED_BONES: [bone: CanonicalBone, continuesTo: CanonicalBone][] = [
+  ["RightUpperArm", "RightForeArm"],
+  ["RightForeArm", "RightHand"],
+  ["LeftUpperArm", "LeftForeArm"],
+  ["LeftForeArm", "LeftHand"],
 ];
 
 /**
- * Rotate `node` so the bone points along `targetWorldDir`.
+ * Rotate `node` so the limb points along `targetWorldDir`.
  *
- * The bone's own direction is read from where its first child sits, rather than
- * assumed - that is the measurement that makes this rig-agnostic.
+ * `childNode` must be the joint that actually continues the limb - its local
+ * offset is what defines which way this bone points. Measuring that rather than
+ * assuming an axis is what makes this work without knowing a rig's conventions.
  */
-export function aimBone(node: Object3D, targetWorldDir: [number, number, number]): Quaternion {
-  const child = node.children.find((c) => (c as { isBone?: boolean }).isBone) ?? node.children[0];
-  const dirLocal = child
-    ? child.position.clone().normalize()
+export function aimBone(
+  node: Object3D,
+  childNode: Object3D | undefined,
+  targetWorldDir: [number, number, number],
+): Quaternion {
+  const dirLocal = childNode
+    ? childNode.position.clone().normalize()
     : new Vector3(0, 1, 0);
 
   const parentWorld = new Quaternion();
