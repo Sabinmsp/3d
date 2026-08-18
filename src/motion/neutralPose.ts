@@ -29,24 +29,19 @@ const ARM_TARGETS: Partial<Record<CanonicalBone, [number, number, number]>> = {
   LeftForeArm: [-0.13, -1, 0.16],
 };
 
-/** A resting hand is softly curled, not flat. Matches the RELAXED handshape. */
-const RESTING_CURL: Record<string, [number, number, number]> = {
-  Thumb: [0.2, 0.15, 0.1],
-  Index: [0.25, 0.3, 0.2],
-  Middle: [0.3, 0.35, 0.25],
-  Ring: [0.35, 0.4, 0.3],
-  Pinky: [0.4, 0.45, 0.3],
-};
-
-/** Euler-based part of the neutral pose - fingers only, where axes are consistent. */
+/**
+ * Fingers are deliberately NOT posed here.
+ *
+ * An earlier version baked a resting curl into the fingers' rest pose, which
+ * quietly broke every handshape: a clip asking for FLAT sends zero offsets,
+ * and zero offset against a curled rest is a curled hand, not a flat one. The
+ * handshape names have to mean what they say, so finger rest stays exactly as
+ * the model exported it and all curl comes from the handshape in the clip.
+ *
+ * Idle hands therefore sit at the model's own rest, which on this rig is
+ * already a natural, slightly-relaxed hand.
+ */
 export const NEUTRAL_FINGER_POSE: Partial<Record<CanonicalBone, [number, number, number]>> = {};
-for (const side of ["Right", "Left"] as const) {
-  for (const [digit, curls] of Object.entries(RESTING_CURL)) {
-    curls.forEach((curl, i) => {
-      NEUTRAL_FINGER_POSE[`${side}${digit}${i + 1}` as CanonicalBone] = [0, 0, -curl];
-    });
-  }
-}
 
 /**
  * Bones the neutral posture aims, each paired with the joint that continues the
