@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useEngineState, useMotionEngine } from "@/react/MotionEngineProvider";
+import { CANONICAL_EXPRESSIONS } from "@/motion/types";
 import type { AvatarSource } from "./AvatarStage";
 
 export function MotionPanel({
@@ -38,10 +39,11 @@ export function MotionPanel({
       </header>
 
       <p className="disclaimer">
-        <strong>Not Auslan.</strong> Every clip below (wave, nod, shake, expressions...) is a generic
-        technical test animation used to prove that motion data can drive a skeleton and a face. None
-        of it is linguistically valid Auslan and none of it should be presented as such. Real signs
-        require validated Auslan motion data.
+        <strong>Unverified drafts.</strong> These clips attempt real Auslan signs, but they were
+        authored from written descriptions and <strong>have not been checked by a fluent Auslan
+        signer</strong>. Treat every one as a guess about form, not a reference. They must be
+        reviewed and corrected by qualified Auslan translators and Deaf community members before
+        being shown to anyone as Auslan.
       </p>
 
       <form onSubmit={submit}>
@@ -191,7 +193,9 @@ export function MotionPanel({
       </details>
 
       <details className="rig">
-        <summary>Resolved expressions ({state.face?.bound.length ?? 0} / 7)</summary>
+        <summary>
+          Resolved expressions ({state.face?.bound.length ?? 0} / {CANONICAL_EXPRESSIONS.length})
+        </summary>
         {state.face ? (
           <>
             <ul>

@@ -1,5 +1,12 @@
 import { Euler, Quaternion } from "three";
-import type { CanonicalBone, CanonicalExpression, MotionClip } from "./types";
+import { expandHandshape } from "./handshapes";
+import type {
+  CanonicalBone,
+  CanonicalExpression,
+  MotionClip,
+  ValidationStatus,
+  Vec3,
+} from "./types";
 
 /**
  * Turns authored keyframes into something cheap to sample every frame.
@@ -24,6 +31,9 @@ export interface ExpressionTrack {
 
 export interface CompiledClip {
   sign: string;
+  meaning?: string;
+  validation: ValidationStatus;
+  reviewedBy?: string;
   duration: number;
   status: "ready" | "placeholder";
   easing: "linear" | "smoothstep";
@@ -44,7 +54,16 @@ export function compileClip(clip: MotionClip): CompiledClip {
   const euler = new Euler();
 
   for (const frame of frames) {
-    for (const [boneName, rotation] of Object.entries(frame.bones)) {
+    // A named handshape expands into finger rotations, then explicit `bones`
+    // entries are layered on top - so a clip can say "FLAT, but with the thumb
+    // tucked" without having to spell out all fifteen joints.
+    const handshapeBones: Partial<Record<CanonicalBone, Vec3>> = {};
+    for (const [side, name] of Object.entries(frame.handshape ?? {})) {
+      if (!name) continue;
+      Object.assign(handshapeBones, expandHandshape(side as "Right" | "Left", name));
+    }
+
+    for (const [boneName, rotation] of Object.entries({ ...handshapeBones, ...frame.bones })) {
       if (!rotation) continue;
       const bone = boneName as CanonicalBone;
 
@@ -78,6 +97,9 @@ export function compileClip(clip: MotionClip): CompiledClip {
 
   return {
     sign: clip.sign,
+    meaning: clip.meaning,
+    validation: clip.validation,
+    reviewedBy: clip.reviewedBy,
     duration,
     status: clip.status ?? "ready",
     easing: clip.easing ?? "smoothstep",

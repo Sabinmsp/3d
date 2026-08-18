@@ -435,11 +435,33 @@ button.ghost {
   vertical-align: middle;
 }
 
+/* Plain-English meaning of the sign being produced right now. */
+.caption-meaning {
+  margin: 0 0 0.4rem;
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
 .caption-source {
   margin: 0.5rem 0 0;
   color: var(--muted);
   font-size: 0.7rem;
   letter-spacing: 0.04em;
+}
+
+/* Rides along with the caption whenever any token is an unreviewed draft. */
+.caption-warning {
+  margin: 0.5rem 0 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: var(--warn);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
 }
 
 @media (max-width: 800px) {

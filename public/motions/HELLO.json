@@ -1,13 +1,18 @@
 {
-  "sign": "YES",
-  "meaning": "yes",
+  "sign": "HELLO",
+  "meaning": "hello",
   "validation": "unvalidated-draft",
-  "duration": 1.8,
-  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: closed fist held up in front of the body, nodding at the wrist like a head nodding, with a matching head nod. Needs review: fist height and whether the head nod should lead or accompany the hand.",
+  "duration": 2.2,
+  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: open flat hand raised beside the head, palm forward, waving side to side. Greeting accompanied by a smile and raised brows. Needs review: hand height, wave amplitude, whether a salute-style variant is preferred.",
   "frames": [
     {
       "time": 0.0,
       "bones": {
+        "RightShoulder": [
+          0,
+          0,
+          0
+        ],
         "RightUpperArm": [
           0,
           0,
@@ -22,134 +27,133 @@
           0,
           0,
           0
-        ],
-        "Neck": [
-          0,
-          0,
-          0
-        ],
-        "Head": [
-          0,
-          0,
-          0
         ]
       },
       "handshape": {
         "Right": "RELAXED"
       },
       "expressions": {
-        "BROW_RAISE": 0
+        "BROW_RAISE": 0,
+        "MOUTH_SMILE": 0
       }
     },
     {
-      "time": 0.4,
+      "time": 0.35,
+      "bones": {
+        "RightShoulder": [
+          0,
+          0,
+          -0.1
+        ],
+        "RightUpperArm": [
+          0.28,
+          0,
+          -0.68
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -1.55
+        ],
+        "RightHand": [
+          0,
+          0,
+          0
+        ]
+      },
+      "handshape": {
+        "Right": "FLAT"
+      },
+      "expressions": {
+        "BROW_RAISE": 0.55,
+        "MOUTH_SMILE": 0.5
+      }
+    },
+    {
+      "time": 0.6,
       "bones": {
         "RightUpperArm": [
-          0.35,
+          0.3,
+          0,
+          -0.78
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -1.8
+        ],
+        "RightHand": [
+          0,
+          0,
+          0.5
+        ]
+      },
+      "expressions": {
+        "MOUTH_SMILE": 0.65
+      }
+    },
+    {
+      "time": 0.85,
+      "bones": {
+        "RightHand": [
+          0,
           0,
           -0.5
+        ]
+      }
+    },
+    {
+      "time": 1.1,
+      "bones": {
+        "RightHand": [
+          0,
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "time": 1.35,
+      "bones": {
+        "RightHand": [
+          0,
+          0,
+          -0.5
+        ]
+      }
+    },
+    {
+      "time": 1.65,
+      "bones": {
+        "RightUpperArm": [
+          0.3,
+          0,
+          -0.78
         ],
         "RightForeArm": [
           0,
           0,
-          -1.5
+          -1.8
         ],
         "RightHand": [
           0,
           0,
           0
         ]
-      },
-      "handshape": {
-        "Right": "FIST"
       },
       "expressions": {
-        "BROW_RAISE": 0.3
+        "BROW_RAISE": 0.25,
+        "MOUTH_SMILE": 0.35
       }
     },
     {
-      "time": 0.7,
+      "time": 2.2,
       "bones": {
-        "RightHand": [
-          0.5,
-          0,
-          0
-        ],
-        "Neck": [
-          0.1,
-          0,
-          0
-        ],
-        "Head": [
-          0.26,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "time": 1.0,
-      "bones": {
-        "RightHand": [
+        "RightShoulder": [
           0,
           0,
           0
         ],
-        "Neck": [
-          0,
-          0,
-          0
-        ],
-        "Head": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "time": 1.3,
-      "bones": {
-        "RightHand": [
-          0.5,
-          0,
-          0
-        ],
-        "Neck": [
-          0.1,
-          0,
-          0
-        ],
-        "Head": [
-          0.26,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "time": 1.55,
-      "bones": {
-        "RightHand": [
-          0,
-          0,
-          0
-        ],
-        "Neck": [
-          0,
-          0,
-          0
-        ],
-        "Head": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "time": 1.8,
-      "bones": {
         "RightUpperArm": [
           0,
           0,
@@ -170,7 +174,8 @@
         "Right": "RELAXED"
       },
       "expressions": {
-        "BROW_RAISE": 0
+        "BROW_RAISE": 0,
+        "MOUTH_SMILE": 0
       }
     }
   ],

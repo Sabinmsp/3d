@@ -19,9 +19,19 @@ const EXPRESSION_ALIASES: Record<CanonicalExpression, string[]> = {
   BROW_DROP: ["Brow_Drop_L", "Brow_Drop_R", "browDownLeft", "browDownRight"],
   EYE_BLINK: ["Eye_Blink_L", "Eye_Blink_R", "Eye_Blink", "eyeBlinkLeft", "eyeBlinkRight"],
   EYE_WIDE: ["Eye_Wide_L", "Eye_Wide_R", "eyeWideLeft", "eyeWideRight"],
+  EYE_SQUINT: ["Eye_Squint_L", "Eye_Squint_R", "eyeSquintLeft", "eyeSquintRight"],
   MOUTH_SMILE: ["Mouth_Smile_L", "Mouth_Smile_R", "Mouth_Smile", "mouthSmileLeft", "mouthSmileRight"],
   MOUTH_FROWN: ["Mouth_Frown_L", "Mouth_Frown_R", "Mouth_Frown", "mouthFrownLeft", "mouthFrownRight"],
   MOUTH_OPEN: ["Mouth_Open", "Open", "jawOpen"],
+
+  // Mouth patterns, mapped onto the rig's viseme shapes.
+  MOUTH_AH: ["Open", "Mouth_Open", "jawOpen", "viseme_aa"],
+  MOUTH_OO: ["Tight_O", "Mouth_Pucker_Open", "viseme_O"],
+  MOUTH_EE: ["Wide", "Mouth_Widen", "viseme_I"],
+  MOUTH_MM: ["Tight", "Mouth_Lips_Tight", "viseme_PP"],
+  MOUTH_FF: ["Dental_Lip", "Mouth_Lips_Tuck", "viseme_FF"],
+  MOUTH_PUFF: ["Cheek_Blow_L", "Cheek_Blow_R", "Mouth_Blow", "cheekPuff"],
+  MOUTH_PURSE: ["Mouth_Pucker", "Tight_O", "mouthPucker"],
 };
 
 function normalize(name: string): string {

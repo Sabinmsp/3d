@@ -9,7 +9,12 @@ import {
   type MotionProvider,
 } from "./providers/MotionProvider";
 import { tokenizeGloss } from "./tokenize";
-import type { CanonicalBone, CanonicalExpression, MotionStatus } from "./types";
+import type {
+  CanonicalBone,
+  CanonicalExpression,
+  MotionStatus,
+  ValidationStatus,
+} from "./types";
 
 /**
  * The public entry point: `engine.playText("HI")` or `engine.playText("how are you")`.
@@ -31,6 +36,10 @@ export type EngineStatus = "idle" | "loading" | "playing" | "error";
 export interface QueueItem {
   sign: string;
   status: "pending" | "playing" | "done" | "placeholder" | "missing" | "unplayable";
+  /** Plain-English meaning, for captions. Absent until the clip has loaded. */
+  meaning?: string;
+  /** Whether this clip's linguistic content has been checked. Absent until loaded. */
+  validation?: ValidationStatus;
 }
 
 export interface EngineState {
@@ -39,6 +48,8 @@ export interface EngineState {
   currentSign: string | null;
   clipStatus: MotionStatus | null;
   clipNotes: string | null;
+  /** Validation status of the clip currently playing. */
+  clipValidation: ValidationStatus | null;
   error: string | null;
   rig: RigReport | null;
   face: ExpressionReport | null;
@@ -56,6 +67,7 @@ const INITIAL_STATE: EngineState = {
   currentSign: null,
   clipStatus: null,
   clipNotes: null,
+  clipValidation: null,
   error: null,
   rig: null,
   face: null,
@@ -200,9 +212,9 @@ export class MotionEngine {
     await this.playText(sign);
   }
 
-  private markQueue(index: number, status: QueueItem["status"]): void {
+  private markQueue(index: number, status: QueueItem["status"], extra?: Partial<QueueItem>): void {
     const queue = this.state.queue.slice();
-    if (queue[index]) queue[index] = { ...queue[index], status };
+    if (queue[index]) queue[index] = { ...queue[index], status, ...extra };
     this.setState({ queue });
   }
 
@@ -216,6 +228,7 @@ export class MotionEngine {
       currentSign: key,
       clipStatus: null,
       clipNotes: null,
+      clipValidation: null,
       unmatchedBones: [],
       unmatchedExpressions: [],
     });
@@ -237,11 +250,15 @@ export class MotionEngine {
     const unmatchedExpressions = clip.expressions.filter((e) => !face?.has(e));
 
     if (clip.status === "placeholder" || clip.duration === 0) {
-      this.markQueue(index, "placeholder");
+      this.markQueue(index, "placeholder", {
+        meaning: clip.meaning,
+        validation: clip.validation,
+      });
       this.setState({
         status: "loading",
         clipStatus: "placeholder",
         clipNotes: clip.notes ?? null,
+        clipValidation: clip.validation,
         unmatchedBones,
         unmatchedExpressions,
         error: null,
@@ -249,10 +266,12 @@ export class MotionEngine {
       return false;
     }
 
+    this.markQueue(index, "playing", { meaning: clip.meaning, validation: clip.validation });
     this.setState({
       status: "playing",
       clipStatus: clip.status,
       clipNotes: clip.notes ?? null,
+      clipValidation: clip.validation,
       unmatchedBones,
       unmatchedExpressions,
       error: null,

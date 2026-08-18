@@ -1,0 +1,135 @@
+{
+  "sign": "THANK-YOU",
+  "meaning": "thank you",
+  "validation": "unvalidated-draft",
+  "duration": 2.0,
+  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: flat hand starts near the chin, palm inward, then moves forward and slightly down away from the mouth. Needs review: exact start contact point at the chin, and the final palm orientation.",
+  "frames": [
+    {
+      "time": 0.0,
+      "bones": {
+        "RightUpperArm": [
+          0,
+          0,
+          0
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "RightHand": [
+          0,
+          0,
+          0
+        ]
+      },
+      "handshape": {
+        "Right": "RELAXED"
+      },
+      "expressions": {
+        "MOUTH_SMILE": 0,
+        "MOUTH_AH": 0
+      }
+    },
+    {
+      "time": 0.45,
+      "bones": {
+        "RightUpperArm": [
+          0.2,
+          0,
+          -0.35
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -2.25
+        ],
+        "RightHand": [
+          0,
+          0,
+          0.15
+        ]
+      },
+      "handshape": {
+        "Right": "FLAT"
+      },
+      "expressions": {
+        "MOUTH_SMILE": 0.4,
+        "MOUTH_AH": 0.25
+      }
+    },
+    {
+      "time": 0.75,
+      "bones": {
+        "RightUpperArm": [
+          0.2,
+          0,
+          -0.35
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -2.25
+        ],
+        "RightHand": [
+          0,
+          0,
+          0.15
+        ]
+      }
+    },
+    {
+      "time": 1.25,
+      "bones": {
+        "RightUpperArm": [
+          0.55,
+          0,
+          -0.75
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -0.7
+        ],
+        "RightHand": [
+          0,
+          0,
+          -0.1
+        ]
+      },
+      "expressions": {
+        "MOUTH_SMILE": 0.55,
+        "MOUTH_AH": 0
+      }
+    },
+    {
+      "time": 2.0,
+      "bones": {
+        "RightUpperArm": [
+          0,
+          0,
+          0
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "RightHand": [
+          0,
+          0,
+          0
+        ]
+      },
+      "handshape": {
+        "Right": "RELAXED"
+      },
+      "expressions": {
+        "MOUTH_SMILE": 0
+      }
+    }
+  ],
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep"
+}

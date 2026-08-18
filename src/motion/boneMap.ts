@@ -12,7 +12,10 @@ import { CANONICAL_BONES, type CanonicalBone } from "./types";
  * have to care, so each canonical bone lists the aliases we know about, most
  * specific first.
  */
-const BONE_ALIASES: Record<CanonicalBone, string[]> = {
+// Cast rather than annotate: the finger entries are generated, so TypeScript
+// cannot see that every canonical key is present. isCanonicalBone() and the
+// CANONICAL_BONES list remain the source of truth for what must exist.
+const BONE_ALIASES = {
   Hips: ["Hips", "mixamorig:Hips", "hip", "pelvis", "CC_Base_Hip"],
   Spine: ["Spine", "mixamorig:Spine", "spine", "spine_01", "CC_Base_Spine01"],
   Chest: [
@@ -76,7 +79,48 @@ const BONE_ALIASES: Record<CanonicalBone, string[]> = {
     "CC_Base_R_Forearm",
   ],
   RightHand: ["RightHand", "hand.R", "hand_r", "rightHand", "CC_Base_R_Hand"],
-};
+
+  ...fingerAliases(),
+} as Record<CanonicalBone, string[]>;
+
+/**
+ * Finger aliases for both hands, generated rather than written out 30 times.
+ *
+ * Conventions differ in the digit's name (Mid vs Middle) and in whether the
+ * hand is part of the bone name (Mixamo's "RightHandIndex1" vs Character
+ * Creator's "CC_Base_R_Index1"), but all of them number joints outward from the
+ * palm the same way.
+ */
+function fingerAliases(): Record<string, string[]> {
+  const digits: [canonical: string, cc: string, mixamo: string][] = [
+    ["Thumb", "Thumb", "Thumb"],
+    ["Index", "Index", "Index"],
+    ["Middle", "Mid", "Middle"],
+    ["Ring", "Ring", "Ring"],
+    ["Pinky", "Pinky", "Pinky"],
+  ];
+
+  const out: Record<string, string[]> = {};
+  for (const side of ["Right", "Left"] as const) {
+    const s = side === "Right" ? "R" : "L";
+    for (const [canonical, cc, mixamo] of digits) {
+      for (const joint of [1, 2, 3]) {
+        out[`${side}${canonical}${joint}`] = [
+          `${side}Hand${mixamo}${joint}`, // Mixamo / Ready Player Me
+          `CC_Base_${s}_${cc}${joint}`, // Character Creator
+          `${cc.toLowerCase()}.0${joint}.${s}`, // Rigify (f_index.01.R)
+          `f_${cc.toLowerCase()}.0${joint}.${s}`,
+          `${side.toLowerCase()}${canonical}${jointWord(joint)}`, // VRM
+        ];
+      }
+    }
+  }
+  return out;
+}
+
+function jointWord(joint: number): string {
+  return joint === 1 ? "Proximal" : joint === 2 ? "Intermediate" : "Distal";
+}
 
 /** "mixamorig:RightForeArm" -> "mixamorigrightforearm" */
 function normalize(name: string): string {

@@ -1,16 +1,163 @@
 {
   "sign": "NO",
-  "status": "ready",
-  "duration": 1.6,
-  "rotationOrder": "XYZ",
-  "easing": "smoothstep",
-  "notes": "TECHNICAL ANIMATION TEST ONLY - a head shake, used to prove yaw rotation on the neck/head chain. Not Auslan.",
+  "meaning": "no",
+  "validation": "unvalidated-draft",
+  "duration": 1.8,
+  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: index and middle fingers extended, closing down onto the thumb twice (a 'beak' closing), with a head shake. Needs review: the closing motion is approximated by a handshape change from TWO to ROUND, which may read as too soft.",
   "frames": [
-    { "time": 0, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_DROP": 0, "MOUTH_FROWN": 0 } },
-    { "time": 0.3, "bones": { "Neck": [0, 0.3, 0], "Head": [0, 0.35, 0] }, "expressions": { "BROW_DROP": 0.4, "MOUTH_FROWN": 0.3 } },
-    { "time": 0.6, "bones": { "Neck": [0, -0.3, 0], "Head": [0, -0.35, 0] } },
-    { "time": 0.9, "bones": { "Neck": [0, 0.3, 0], "Head": [0, 0.35, 0] } },
-    { "time": 1.2, "bones": { "Neck": [0, -0.3, 0], "Head": [0, -0.35, 0] } },
-    { "time": 1.6, "bones": { "Neck": [0, 0, 0], "Head": [0, 0, 0] }, "expressions": { "BROW_DROP": 0, "MOUTH_FROWN": 0 } }
-  ]
+    {
+      "time": 0.0,
+      "bones": {
+        "RightUpperArm": [
+          0,
+          0,
+          0
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "Neck": [
+          0,
+          0,
+          0
+        ],
+        "Head": [
+          0,
+          0,
+          0
+        ]
+      },
+      "handshape": {
+        "Right": "RELAXED"
+      },
+      "expressions": {
+        "BROW_DROP": 0
+      }
+    },
+    {
+      "time": 0.35,
+      "bones": {
+        "RightUpperArm": [
+          0.4,
+          0,
+          -0.55
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -1.4
+        ]
+      },
+      "handshape": {
+        "Right": "TWO"
+      },
+      "expressions": {
+        "BROW_DROP": 0.35
+      }
+    },
+    {
+      "time": 0.6,
+      "handshape": {
+        "Right": "ROUND"
+      },
+      "bones": {
+        "Neck": [
+          0,
+          0.24,
+          0
+        ],
+        "Head": [
+          0,
+          0.3,
+          0
+        ]
+      }
+    },
+    {
+      "time": 0.85,
+      "handshape": {
+        "Right": "TWO"
+      },
+      "bones": {
+        "Neck": [
+          0,
+          -0.24,
+          0
+        ],
+        "Head": [
+          0,
+          -0.3,
+          0
+        ]
+      }
+    },
+    {
+      "time": 1.1,
+      "handshape": {
+        "Right": "ROUND"
+      },
+      "bones": {
+        "Neck": [
+          0,
+          0.24,
+          0
+        ],
+        "Head": [
+          0,
+          0.3,
+          0
+        ]
+      }
+    },
+    {
+      "time": 1.35,
+      "bones": {
+        "Neck": [
+          0,
+          -0.24,
+          0
+        ],
+        "Head": [
+          0,
+          -0.3,
+          0
+        ]
+      }
+    },
+    {
+      "time": 1.8,
+      "bones": {
+        "RightUpperArm": [
+          0,
+          0,
+          0
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "Neck": [
+          0,
+          0,
+          0
+        ],
+        "Head": [
+          0,
+          0,
+          0
+        ]
+      },
+      "handshape": {
+        "Right": "RELAXED"
+      },
+      "expressions": {
+        "BROW_DROP": 0
+      }
+    }
+  ],
+  "rotationOrder": "XYZ",
+  "easing": "smoothstep"
 }

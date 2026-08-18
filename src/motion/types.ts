@@ -1,4 +1,5 @@
 import type { EulerOrder } from "three";
+import { HANDSHAPES, isHandshapeName } from "./handshapes";
 
 /**
  * Core data contract for the whole pipeline.
@@ -34,6 +35,41 @@ export const CANONICAL_BONES = [
   "RightUpperArm",
   "RightForeArm",
   "RightHand",
+
+  // Finger joints. Handshape is phonemic in signed languages - two signs can be
+  // identical in location and movement and differ only in the fingers - so these
+  // are not optional detail, they are part of the minimal unit of meaning.
+  // Numbered outward from the palm: 1 = knuckle, 3 = fingertip joint.
+  "RightThumb1",
+  "RightThumb2",
+  "RightThumb3",
+  "RightIndex1",
+  "RightIndex2",
+  "RightIndex3",
+  "RightMiddle1",
+  "RightMiddle2",
+  "RightMiddle3",
+  "RightRing1",
+  "RightRing2",
+  "RightRing3",
+  "RightPinky1",
+  "RightPinky2",
+  "RightPinky3",
+  "LeftThumb1",
+  "LeftThumb2",
+  "LeftThumb3",
+  "LeftIndex1",
+  "LeftIndex2",
+  "LeftIndex3",
+  "LeftMiddle1",
+  "LeftMiddle2",
+  "LeftMiddle3",
+  "LeftRing1",
+  "LeftRing2",
+  "LeftRing3",
+  "LeftPinky1",
+  "LeftPinky2",
+  "LeftPinky3",
 ] as const;
 
 export type CanonicalBone = (typeof CANONICAL_BONES)[number];
@@ -54,13 +90,29 @@ export function isCanonicalBone(name: string): name is CanonicalBone {
  * referencing a bone the rig lacks just skips that bone.
  */
 export const CANONICAL_EXPRESSIONS = [
+  // Non-manual features. In Auslan these are grammar, not decoration: brow
+  // position distinguishes question types, and head/brow together mark negation,
+  // topics and conditionals.
   "BROW_RAISE",
   "BROW_DROP",
   "EYE_BLINK",
   "EYE_WIDE",
+  "EYE_SQUINT",
   "MOUTH_SMILE",
   "MOUTH_FROWN",
   "MOUTH_OPEN",
+
+  // Mouth patterns. Signed languages carry meaning on the mouth in two ways:
+  // "mouthings" borrowed from the spoken language, and "mouth gestures" that
+  // belong to the sign itself. Some sign pairs differ ONLY in mouth pattern, so
+  // these are load-bearing, not lip-sync polish.
+  "MOUTH_AH",
+  "MOUTH_OO",
+  "MOUTH_EE",
+  "MOUTH_MM",
+  "MOUTH_FF",
+  "MOUTH_PUFF",
+  "MOUTH_PURSE",
 ] as const;
 
 export type CanonicalExpression = (typeof CANONICAL_EXPRESSIONS)[number];
@@ -91,13 +143,45 @@ export interface MotionFrame {
   time: number;
   bones: Partial<Record<CanonicalBone, Vec3>>;
   expressions?: Partial<Record<CanonicalExpression, number>>;
+  /**
+   * Named handshape per hand, e.g. `{ "Right": "FLAT" }`. Expanded into finger
+   * bone rotations at compile time - see handshapes.ts. Explicit `bones` entries
+   * win over the handshape, so a clip can name a shape and then adjust one digit.
+   */
+  handshape?: Partial<Record<"Right" | "Left", string>>;
 }
 
 export type MotionStatus = "ready" | "placeholder";
 
+/**
+ * How much trust this clip's linguistic content has earned.
+ *
+ * There is no default and no "probably fine" value. A clip is either reviewed by
+ * someone qualified to judge it, or it is a draft - and the app says which, every
+ * time it plays. This exists because the failure mode of a signing avatar is
+ * silent: wrong signing still looks like fluent signing to someone who cannot
+ * check it, which is precisely the audience being served.
+ */
+export type ValidationStatus =
+  /** Authored from written descriptions, NOT checked by a fluent signer. */
+  | "unvalidated-draft"
+  /** Reviewed and corrected by a qualified Auslan informant or translator. */
+  | "community-reviewed"
+  /** Not a sign at all - a technical fixture (a wave, a nod) used to test the pipeline. */
+  | "technical-test";
+
 export interface MotionClip {
-  /** Gloss token this clip animates, e.g. "HI". */
+  /** Gloss token this clip animates, e.g. "THANK-YOU". */
   sign: string;
+  /** Plain-English meaning, shown in captions so the sign can be read alongside it. */
+  meaning?: string;
+  /** Required. See ValidationStatus - there is deliberately no default. */
+  validation: ValidationStatus;
+  /**
+   * Who reviewed this clip and when, once it has been. Free text, shown in the
+   * app. Empty for drafts.
+   */
+  reviewedBy?: string;
   /** Total length in seconds. */
   duration: number;
   frames: MotionFrame[];
@@ -135,6 +219,20 @@ export function parseMotionClip(raw: unknown, sourceLabel: string): MotionClip {
 
   if (typeof obj.sign !== "string" || obj.sign.length === 0) {
     fail('missing "sign"');
+  }
+
+  // Deliberately required with no default. A clip that forgets to declare its
+  // validation status must fail loudly rather than quietly render as if trusted.
+  const VALID_STATUSES: ValidationStatus[] = [
+    "unvalidated-draft",
+    "community-reviewed",
+    "technical-test",
+  ];
+  if (!VALID_STATUSES.includes(obj.validation as ValidationStatus)) {
+    fail(
+      `missing or invalid "validation". Must be one of: ${VALID_STATUSES.join(", ")}. ` +
+        `Every clip must declare whether its linguistic content has been checked.`,
+    );
   }
   if (typeof obj.duration !== "number" || !Number.isFinite(obj.duration) || obj.duration < 0) {
     fail('"duration" must be a non-negative number');
@@ -190,13 +288,36 @@ export function parseMotionClip(raw: unknown, sourceLabel: string): MotionClip {
       }
     }
 
-    return { time: frame.time as number, bones, expressions };
+    let handshape: Partial<Record<"Right" | "Left", string>> | undefined;
+    if (frame.handshape !== undefined) {
+      if (typeof frame.handshape !== "object" || frame.handshape === null) {
+        fail(`frame ${i} has an invalid "handshape"`);
+      }
+      handshape = {};
+      for (const [side, name] of Object.entries(frame.handshape as Record<string, unknown>)) {
+        if (side !== "Right" && side !== "Left") {
+          fail(`frame ${i} handshape side must be "Right" or "Left", got "${side}"`);
+        }
+        if (typeof name !== "string" || !isHandshapeName(name)) {
+          fail(
+            `frame ${i} handshape "${String(name)}" is not defined. ` +
+              `Known handshapes: ${Object.keys(HANDSHAPES).join(", ")}`,
+          );
+        }
+        handshape[side] = name;
+      }
+    }
+
+    return { time: frame.time as number, bones, expressions, handshape };
   });
 
   if (frames.length === 0) fail("clip has no frames");
 
   return {
     sign: obj.sign as string,
+    meaning: typeof obj.meaning === "string" ? obj.meaning : undefined,
+    validation: obj.validation as ValidationStatus,
+    reviewedBy: typeof obj.reviewedBy === "string" ? obj.reviewedBy : undefined,
     duration: obj.duration as number,
     frames,
     status: obj.status === "placeholder" ? "placeholder" : "ready",

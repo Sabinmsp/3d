@@ -4,31 +4,38 @@ A proof of concept for one link in a Deaf accessibility project: showing that
 **stored motion data can programmatically drive a rigged 3D human in a browser**,
 with no per-word animation code.
 
-Type `HI`, press Play Motion, and the avatar waves — arm, hand and **facial
-expression** all driven entirely by `public/motions/HI.json`.
+Type `HELLO`, press Play Motion, and the avatar signs it — arm, **handshape**,
+**mouth pattern** and **facial expression** all driven entirely by
+`public/motions/HELLO.json`.
 
-Type more than one word — e.g. `HI YES THANKS` — and each token is looked up and
+Type more than one word — e.g. `HELLO GOOD` — and each token is looked up and
 played in sequence, one after another. This is **splitting text into tokens and
 queuing clips**, not translating English into Auslan. See "What playText() does
 and does not do" below before reading anything into the word order.
 
-There are 10 working test clips (`HI BYE YES NO THANKS STOP COME POINT THINKING
-HAPPY`) plus 2 deliberate placeholders (`PAY`, `FRIDAY`).
+There are 10 draft sign clips (`HELLO THANK-YOU YES NO GOOD BAD SORRY DEAF HELP
+NAME`) plus 2 deliberate placeholders (`PAY`, `FRIDAY`).
 
-> ### This is not Auslan
+> ### These signs are unverified drafts
 >
-> **Every clip in this repo is a generic technical fixture** — a wave, a nod, a
-> head shake, a smile. None of them are linguistically valid Auslan signs and
-> none should be shown to anyone as one. They exist to prove the data-to-avatar
-> pipeline works, nothing more. Real signs require validated Auslan motion data
-> produced with Deaf community involvement. The same disclaimer is displayed in
-> the app itself.
+> The clips in this repo **attempt** real Auslan signs. They were authored from
+> written descriptions by someone who is not a signer, and **none has been
+> checked by a fluent Auslan signer**. Every one should be treated as a guess
+> about form until reviewed.
 >
-> This matters especially for the face. In Auslan, facial expression is
-> **grammar**, not decoration — brow position distinguishes question types,
-> and mouth patterns carry meaning that the hands do not. The expression support
-> here is a rendering capability, not a claim that any of these faces mean
-> anything.
+> This is not false modesty. The failure mode of a signing avatar is silent:
+> wrong signing still looks like fluent signing to someone who cannot check it,
+> and that describes exactly the audience this project serves. A confident,
+> polished, wrong avatar is worse than an obviously unfinished one.
+>
+> Each clip carries a required `validation` field, currently
+> `unvalidated-draft` for all of them, and the app displays that status in the
+> caption bar every time a clip plays. Nothing can quietly graduate to looking
+> trustworthy — see [Validation](#validation).
+>
+> Known-weakest areas, in rough order: two-handed signs with contact between the
+> hands (`HELP`), signs where the hand should touch the body (`SORRY`, `DEAF`,
+> `NAME`, `THANK-YOU`), and every mouth pattern.
 
 ## Run it
 
@@ -53,15 +60,15 @@ built-in placeholder figure and says so in the panel.
 ## The pipeline
 
 ```
-"HI"                       text / gloss token
+"HELLO"                    text / gloss token
   ↓
-MotionProvider             finds and loads HI.json
+MotionProvider             finds and loads HELLO.json
   ↓
-MotionClip                 keyframes: time + bone rotations + expression weights
+MotionClip                 keyframes: bone rotations + handshape + expressions
   ↓
-compileClip                keyframes → per-bone and per-expression tracks
+compileClip                expands handshapes, builds per-channel tracks
   ↓
-MotionController           interpolates and applies both over time
+MotionController           interpolates and applies all channels over time
   ↓
 RigBinding                 canonical bone names → this model's actual bones
 ExpressionBinding          canonical expressions → this model's morph targets
@@ -78,9 +85,9 @@ changes. The controller, the rig binding, the avatar and the UI stay as they are
 ```
 public/
   motions/
-    HI.json BYE.json YES.json NO.json THANKS.json
-    STOP.json COME.json POINT.json THINKING.json HAPPY.json
-                          10 working test clips (none are real signs)
+    HELLO.json THANK-YOU.json YES.json NO.json GOOD.json
+    BAD.json SORRY.json DEAF.json HELP.json NAME.json
+                          10 DRAFT sign clips - none reviewed by a signer
     PAY.json              placeholder - no motion data
     FRIDAY.json           placeholder - no motion data
     manifest.json         list of known signs, drives the quick-pick chips
@@ -92,6 +99,7 @@ src/
   motion/                 pure TypeScript - no React, no scene graph
     types.ts              MotionClip / MotionFrame + validation of untrusted data
     boneMap.ts            canonical bone names → Mixamo / RPM / VRM / Rigify / CC names
+    handshapes.ts         named handshapes (FLAT, FIST, POINT...) → finger rotations
     expressionMap.ts      canonical expressions → CC / ARKit morph target names
     compileClip.ts        keyframes → per-bone + per-expression tracks, interpolation
     RigBinding.ts         binds canonical names to a loaded model, captures rest pose
@@ -117,11 +125,11 @@ src/
 
 ## The one generic function
 
-There is no `if (word === "HI")` anywhere. Playing any input is:
+There is no `if (word === "HELLO")` anywhere. Playing any input is:
 
 ```ts
-engine.playText("HI");             // one token
-engine.playText("HI TEST_NOD");    // a queued sequence
+engine.playText("HELLO");          // one token
+engine.playText("HELLO GOOD");     // a queued sequence
 ```
 
 which splits the input on whitespace, and for each token: finds `<TOKEN>.json`,
@@ -131,10 +139,10 @@ token once the clip finishes. Adding a sign means **adding a file**, not editing
 code:
 
 ```bash
-cp public/motions/HI.json public/motions/THANKS.json
+cp public/motions/HELLO.json public/motions/PLEASE.json
 ```
 
-Edit the frames, add it to `manifest.json`, and `playText("THANKS")` works.
+Edit the frames, add it to `manifest.json`, and `playText("PLEASE")` works.
 
 ## What `playText()` does and does not do
 
@@ -155,8 +163,61 @@ review before its output goes in front of anyone as real signing.
 
 In the UI, an unresolved queue token doesn't stop the sequence — the app plays
 what it can, marks each token `done` / `placeholder` / `missing` in the progress
-strip, and moves on. Playing a single word, e.g. `HI`, is just a one-token
+strip, and moves on. Playing a single word, e.g. `HELLO`, is just a one-token
 sequence.
+
+## Validation
+
+Every clip must declare a `validation` field. There is no default — a clip that
+omits it fails to parse, with an error naming the file. That is deliberate: the
+one thing that must never happen quietly is an unchecked sign rendering as if it
+were trustworthy.
+
+| Status | Meaning |
+| --- | --- |
+| `unvalidated-draft` | Authored from written descriptions. **Not** checked by a fluent signer. All 10 clips are currently here. |
+| `community-reviewed` | Reviewed and corrected by a qualified Auslan informant or translator. Record who, in `reviewedBy`. |
+| `technical-test` | Not a sign at all — a fixture (a wave, a nod) used to exercise the pipeline. |
+
+While any token in a sequence is a draft, the caption bar shows an amber
+**"Unverified draft signing"** banner, and the panel carries the same warning.
+
+### What review actually requires
+
+Reviewing these is not "does it look about right". Each clip needs checking on
+the five parameters a sign is described by — handshape, orientation, location,
+movement, and non-manual features — and each clip's `notes` field states what
+articulation was attempted and what the author was unsure about, so a reviewer
+has something specific to correct rather than a blank yes/no.
+
+Known structural gaps that no amount of tuning fixes:
+
+- **Contact is faked.** Hand-to-body and hand-to-hand contact is approximated by
+  posing joints independently. Nothing guarantees the hand actually reaches the
+  chin, ear or opposite palm — it just gets near. Signs distinguished by contact
+  location are unreliable here.
+- **Movement paths are keyframed straight lines.** Signs with arcs, circles or
+  repeated contact are approximated with a handful of keys.
+- **Mouth patterns are single visemes.** Real mouthings are shaped over the whole
+  sign; these are one held shape.
+
+## Handshapes
+
+Handshape is phonemic — two signs can be identical in location and movement and
+differ only in the fingers — so motion data names a shape rather than listing 15
+finger rotations:
+
+```json
+{ "time": 0.35, "handshape": { "Right": "FLAT" } }
+```
+
+`src/motion/handshapes.ts` expands that into joint rotations. Defined shapes:
+`FLAT`, `SPREAD`, `FIST`, `POINT`, `TWO`, `GOOD`, `HOOK`, `CUP`, `ROUND`,
+`RELAXED`. Explicit `bones` entries in the same frame win over the handshape, so
+a clip can say "FLAT, but with the thumb tucked".
+
+The rotations in that file are eyeballed against one rig, not measured from
+signer data — they are among the first things a reviewer should correct.
 
 ## Captions
 
