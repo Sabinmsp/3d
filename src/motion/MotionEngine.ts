@@ -120,6 +120,14 @@ export class MotionEngine {
     const face = new ExpressionBinding(root);
     this.controller.setRig(binding);
     this.controller.setFace(face);
+
+    // Dev-only handle for calibrating a new rig from the browser console. Bone
+    // axes differ between rigs and are not knowable from the file alone, so
+    // being able to measure a joint beats guessing at its rotation order.
+    if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
+      (window as unknown as Record<string, unknown>).__rig = binding;
+    }
+
     this.setState({
       rig: binding.report,
       face: face.report,

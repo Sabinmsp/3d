@@ -1,5 +1,11 @@
-import { Quaternion, type Object3D } from "three";
+import { Euler, Quaternion, type Object3D } from "three";
 import { mapSkeleton, type BoneMatch } from "./boneMap";
+import {
+  AIMED_BONES,
+  NEUTRAL_FINGER_POSE,
+  aimBone,
+  neutralTargetFor,
+} from "./neutralPose";
 import type { CanonicalBone } from "./types";
 
 /**
@@ -28,15 +34,47 @@ export class RigBinding {
 
   constructor(root: Object3D) {
     const result = mapSkeleton(root);
+    const euler = new Euler();
+    const offset = new Quaternion();
 
     for (const match of result.matched) {
+      // Finger curl is a plain Euler offset - those axes are consistent enough
+      // across rigs to hardcode.
+      const curl = NEUTRAL_FINGER_POSE[match.canonical];
+      const restQuaternion = match.node.quaternion.clone();
+
+      if (curl) {
+        euler.set(curl[0], curl[1], curl[2], "XYZ");
+        offset.setFromEuler(euler);
+        restQuaternion.multiply(offset);
+      }
+
       this.bones.set(match.canonical, {
         canonical: match.canonical,
         nodeName: match.nodeName,
         node: match.node,
-        restQuaternion: match.node.quaternion.clone(),
+        restQuaternion,
       });
     }
+
+    // Arms are AIMED rather than offset by fixed angles - see neutralPose.ts for
+    // why. Parents first, and the world matrix is refreshed between joints so
+    // each child aims from its parent's already-posed orientation.
+    for (const bone of AIMED_BONES) {
+      const bound = this.bones.get(bone);
+      const target = neutralTargetFor(bone);
+      if (!bound || !target) continue;
+
+      bound.node.updateMatrixWorld(true);
+      const aimed = aimBone(bound.node, target);
+      bound.restQuaternion.copy(aimed);
+      bound.node.quaternion.copy(aimed);
+      bound.node.updateMatrixWorld(true);
+    }
+
+    // Drop the avatar into the neutral posture immediately, so it is standing
+    // naturally before anything plays.
+    this.resetToRest();
 
     this.report = {
       bound: result.matched.map((m) => ({
@@ -51,6 +89,11 @@ export class RigBinding {
 
   get(bone: CanonicalBone): BoundBone | undefined {
     return this.bones.get(bone);
+  }
+
+  /** All bound bones - used by the dev console when calibrating a rig. */
+  all(): BoundBone[] {
+    return [...this.bones.values()];
   }
 
   has(bone: CanonicalBone): boolean {

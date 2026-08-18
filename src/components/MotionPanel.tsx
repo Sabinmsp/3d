@@ -18,7 +18,7 @@ export function MotionPanel({
 }) {
   const engine = useMotionEngine();
   const state = useEngineState();
-  const [input, setInput] = useState("HI");
+  const [input, setInput] = useState("HELLO");
   const [loop, setLoop] = useState(false);
 
   const submit = (event: FormEvent) => {
@@ -52,7 +52,7 @@ export function MotionPanel({
           id="sign"
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="HI"
+          placeholder="HELLO"
           autoComplete="off"
           spellCheck={false}
         />
