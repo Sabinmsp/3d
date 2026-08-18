@@ -60,6 +60,8 @@ export interface EngineState {
   available: MotionEntry[];
   /** The full token sequence from the last playText() call, and progress through it. */
   queue: QueueItem[];
+  /** Dev only: bone currently showing local-axis helpers. */
+  debugBone: CanonicalBone | null;
 }
 
 const INITIAL_STATE: EngineState = {
@@ -75,6 +77,7 @@ const INITIAL_STATE: EngineState = {
   unmatchedExpressions: [],
   available: [],
   queue: [],
+  debugBone: null,
 };
 
 type LoadResult =
@@ -323,6 +326,11 @@ export class MotionEngine {
   /** The bound rig, for the dev bone tester. */
   getRig(): RigBinding | null {
     return this.controller.getRig();
+  }
+
+  /** Which bone the dev axis helper is attached to, if any. */
+  setDebugBone(bone: CanonicalBone | null): void {
+    this.setState({ debugBone: bone });
   }
 
   /** Driven by the render loop. */

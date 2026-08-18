@@ -4,7 +4,7 @@ import { Component, Suspense, useEffect, useState, type ReactNode } from "react"
 import dynamic from "next/dynamic";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { SkeletonHelper, type Object3D } from "three";
+import { AxesHelper, SkeletonHelper, type Object3D } from "three";
 import { PlaceholderAvatar } from "./PlaceholderAvatar";
 import { AVATAR_URL } from "@/avatarConfig";
 import { useEngineState, useMotionEngine } from "@/react/MotionEngineProvider";
@@ -100,6 +100,32 @@ class AvatarErrorBoundary extends Component<
   }
 }
 
+/**
+ * Draws the selected bone's own X/Y/Z axes at its position, so the axis a
+ * slider moves can be seen rather than inferred. Red=X, green=Y, blue=Z.
+ */
+function BoneAxes() {
+  const engine = useMotionEngine();
+  const state = useEngineState();
+  const { scene } = useThree();
+
+  useEffect(() => {
+    const bone = state.debugBone;
+    const bound = bone ? engine.getRig()?.get(bone) : null;
+    if (!bound) return;
+
+    const helper = new AxesHelper(0.18);
+    // Parent to the bone itself so the axes follow it as it rotates.
+    bound.node.add(helper);
+    return () => {
+      bound.node.remove(helper);
+      helper.dispose();
+    };
+  }, [engine, scene, state.debugBone, state.rig]);
+
+  return null;
+}
+
 export function AvatarStage({
   onSourceChange,
   showSkeleton = false,
@@ -146,6 +172,7 @@ export function AvatarStage({
 
       <MotionTicker />
       {showSkeleton && <SkeletonOverlay />}
+      <BoneAxes />
 
       {/* Inspect the arm from any angle. */}
       <OrbitControls
