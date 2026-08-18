@@ -17,6 +17,7 @@ export function App() {
   const [avatarSource, setAvatarSource] = useState<AvatarSource>("checking");
   const [avatarError, setAvatarError] = useState<string | null>(null);
   const [captions, setCaptions] = useState(true);
+  const [skeleton, setSkeleton] = useState(false);
 
   const handleSourceChange = useCallback((source: AvatarSource, error: string | null) => {
     setAvatarSource(source);
@@ -31,9 +32,11 @@ export function App() {
           avatarError={avatarError}
           captions={captions}
           onCaptionsChange={setCaptions}
+          skeleton={skeleton}
+          onSkeletonChange={setSkeleton}
         />
         <section className="stage">
-          <AvatarStage onSourceChange={handleSourceChange} />
+          <AvatarStage onSourceChange={handleSourceChange} showSkeleton={skeleton} />
           {captions && <CaptionBar />}
           <p className="hint-overlay">Drag to orbit &middot; scroll to zoom</p>
         </section>

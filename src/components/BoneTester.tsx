@@ -70,6 +70,44 @@ export function BoneTester() {
     setAngles({ x: 0, y: 0, z: 0 });
   };
 
+  /**
+   * The staged rig check: neutral, then one joint at a time outward along the
+   * arm. Each step resets first, so a failure is always attributable to the one
+   * bone under test rather than to leftovers from the previous step.
+   */
+  const runStep = (step: "neutral" | "upperArm" | "foreArm" | "hand" | "fingers") => {
+    const rig = engine.getRig();
+    if (!rig) return;
+    rig.resetToRest();
+    setAngles({ x: 0, y: 0, z: 0 });
+
+    const pose = (name: CanonicalBone, x: number, y: number, z: number) => {
+      const bound = rig.get(name);
+      if (!bound) return;
+      const offset = new Quaternion().setFromEuler(new Euler(x * DEG, y * DEG, z * DEG, "XYZ"));
+      bound.node.quaternion.copy(bound.restQuaternion).multiply(offset);
+    };
+
+    if (step === "neutral") return; // reset above is the whole test
+    if (step === "upperArm") pose("RightUpperArm", 0, 0, -45);
+    if (step === "foreArm") {
+      pose("RightUpperArm", 0, 0, -45);
+      pose("RightForeArm", 0, 0, -70);
+    }
+    if (step === "hand") {
+      pose("RightUpperArm", 0, 0, -45);
+      pose("RightForeArm", 0, 0, -70);
+      pose("RightHand", 0, 0, -30);
+    }
+    if (step === "fingers") {
+      pose("RightUpperArm", 0, 0, -45);
+      pose("RightForeArm", 0, 0, -70);
+      for (const digit of ["Index", "Middle", "Ring", "Pinky"] as const) {
+        for (let j = 1; j <= 3; j++) pose(`Right${digit}${j}` as CanonicalBone, 0, 0, -70);
+      }
+    }
+  };
+
   return (
     <details className="rig tester">
       <summary>Bone tester (dev)</summary>
@@ -109,6 +147,25 @@ export function BoneTester() {
       <button type="button" className="ghost" onClick={reset}>
         RESET POSE
       </button>
+
+      <p className="hint">Staged check - run in order; each step resets first.</p>
+      <div className="steps">
+        <button type="button" className="chip" onClick={() => runStep("neutral")}>
+          1. Neutral
+        </button>
+        <button type="button" className="chip" onClick={() => runStep("upperArm")}>
+          2. Upper arm
+        </button>
+        <button type="button" className="chip" onClick={() => runStep("foreArm")}>
+          3. Forearm
+        </button>
+        <button type="button" className="chip" onClick={() => runStep("hand")}>
+          4. Hand
+        </button>
+        <button type="button" className="chip" onClick={() => runStep("fingers")}>
+          5. Fingers
+        </button>
+      </div>
     </details>
   );
 }

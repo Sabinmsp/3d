@@ -373,6 +373,17 @@ button.ghost {
   font-size: 0.75rem;
 }
 
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.steps button {
+  width: auto;
+  margin-top: 0;
+}
+
 /* --- 3D stage --- */
 
 .stage {

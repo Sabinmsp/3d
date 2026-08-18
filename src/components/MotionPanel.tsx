@@ -11,11 +11,15 @@ export function MotionPanel({
   avatarError,
   captions,
   onCaptionsChange,
+  skeleton,
+  onSkeletonChange,
 }: {
   avatarSource: AvatarSource;
   avatarError: string | null;
   captions: boolean;
   onCaptionsChange: (on: boolean) => void;
+  skeleton: boolean;
+  onSkeletonChange: (on: boolean) => void;
 }) {
   const engine = useMotionEngine();
   const state = useEngineState();
@@ -88,6 +92,17 @@ export function MotionPanel({
             />
             Captions
           </label>
+
+          {process.env.NODE_ENV !== "production" && (
+            <label className="check">
+              <input
+                type="checkbox"
+                checked={skeleton}
+                onChange={(event) => onSkeletonChange(event.target.checked)}
+              />
+              Skeleton
+            </label>
+          )}
         </div>
       </form>
 
