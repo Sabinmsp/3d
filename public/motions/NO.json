@@ -3,7 +3,7 @@
   "meaning": "no",
   "validation": "unvalidated-draft",
   "duration": 1.8,
-  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: index and middle fingers extended, closing down onto the thumb twice (a 'beak' closing), with a head shake. Needs review: the closing motion is approximated by a handshape change from TWO to ROUND, which may read as too soft.",
+  "notes": "DRAFT - not checked by a fluent Auslan signer. Deliberately kept simple: no hand-to-body or hand-to-hand contact, because contact is faked by posing joints independently and cannot be trusted. Poses verified visually against the standing neutral, using axes measured with the bone tester (upper arm X+ forward / Z- raises; forearm Z- bends the elbow; palm twist carried on the wrist). Articulation attempted: index and middle fingers extended at chest height with a clear head shake, brows drawn down. Kept to a head shake plus a static handshape rather than a finger-closing movement, which could not be executed cleanly.",
   "frames": [
     {
       "time": 0.0,
@@ -14,6 +14,11 @@
           0
         ],
         "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "RightHand": [
           0,
           0,
           0
@@ -37,91 +42,97 @@
       }
     },
     {
-      "time": 0.35,
+      "time": 0.4,
       "bones": {
         "RightUpperArm": [
-          0.4,
+          0.5,
           0,
-          -0.55
+          -0.8
         ],
         "RightForeArm": [
           0,
           0,
-          -1.4
+          -1.8
+        ],
+        "RightHand": [
+          0,
+          1.5,
+          0
+        ],
+        "Neck": [
+          0,
+          0,
+          0
+        ],
+        "Head": [
+          0,
+          0,
+          0
         ]
       },
       "handshape": {
         "Right": "TWO"
       },
       "expressions": {
-        "BROW_DROP": 0.35
+        "BROW_DROP": 0.4
       }
     },
     {
-      "time": 0.6,
-      "handshape": {
-        "Right": "ROUND"
-      },
+      "time": 0.7,
       "bones": {
         "Neck": [
           0,
-          0.24,
+          0.22,
           0
         ],
         "Head": [
           0,
-          0.3,
+          0.28,
           0
         ]
       }
     },
     {
-      "time": 0.85,
-      "handshape": {
-        "Right": "TWO"
-      },
+      "time": 1.0,
       "bones": {
         "Neck": [
           0,
-          -0.24,
+          -0.22,
           0
         ],
         "Head": [
           0,
-          -0.3,
+          -0.28,
           0
         ]
       }
     },
     {
-      "time": 1.1,
-      "handshape": {
-        "Right": "ROUND"
-      },
+      "time": 1.3,
       "bones": {
         "Neck": [
           0,
-          0.24,
+          0.22,
           0
         ],
         "Head": [
           0,
-          0.3,
+          0.28,
           0
         ]
       }
     },
     {
-      "time": 1.35,
+      "time": 1.55,
       "bones": {
         "Neck": [
           0,
-          -0.24,
+          0,
           0
         ],
         "Head": [
           0,
-          -0.3,
+          0,
           0
         ]
       }
@@ -139,12 +150,7 @@
           0,
           0
         ],
-        "Neck": [
-          0,
-          0,
-          0
-        ],
-        "Head": [
+        "RightHand": [
           0,
           0,
           0

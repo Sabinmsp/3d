@@ -2,8 +2,8 @@
   "sign": "GOOD",
   "meaning": "good",
   "validation": "unvalidated-draft",
-  "duration": 1.6,
-  "notes": "DRAFT - authored from written descriptions, NOT checked by a fluent Auslan signer. Articulation attempted: closed fist with the thumb extended upward, moved forward from the body. Needs review: height, and whether a short forward movement or a static hold is correct.",
+  "duration": 1.7,
+  "notes": "DRAFT - not checked by a fluent Auslan signer. Deliberately kept simple: no hand-to-body or hand-to-hand contact, because contact is faked by posing joints independently and cannot be trusted. Poses verified visually against the standing neutral, using axes measured with the bone tester (upper arm X+ forward / Z- raises; forearm Z- bends the elbow; palm twist carried on the wrist). Articulation attempted: closed fist with the thumb extended upward, raised to chest height and pushed slightly forward, with a smile.",
   "frames": [
     {
       "time": 0.0,
@@ -28,25 +28,26 @@
         "Right": "RELAXED"
       },
       "expressions": {
-        "MOUTH_SMILE": 0
+        "MOUTH_SMILE": 0,
+        "BROW_RAISE": 0
       }
     },
     {
       "time": 0.45,
       "bones": {
         "RightUpperArm": [
-          0.5,
+          0.55,
           0,
-          -0.6
+          -0.7
         ],
         "RightForeArm": [
           0,
           0,
-          -1.35
+          -1.6
         ],
         "RightHand": [
           0,
-          0,
+          1.5,
           0
         ]
       },
@@ -54,27 +55,52 @@
         "Right": "GOOD"
       },
       "expressions": {
-        "MOUTH_SMILE": 0.5,
-        "BROW_RAISE": 0.25
+        "MOUTH_SMILE": 0.55,
+        "BROW_RAISE": 0.3
       }
     },
     {
-      "time": 1.05,
+      "time": 1.0,
       "bones": {
         "RightUpperArm": [
           0.75,
           0,
-          -0.6
+          -0.7
         ],
         "RightForeArm": [
           0,
           0,
-          -1.2
+          -1.5
+        ],
+        "RightHand": [
+          0,
+          1.5,
+          0
         ]
       }
     },
     {
-      "time": 1.6,
+      "time": 1.25,
+      "bones": {
+        "RightUpperArm": [
+          0.55,
+          0,
+          -0.7
+        ],
+        "RightForeArm": [
+          0,
+          0,
+          -1.6
+        ],
+        "RightHand": [
+          0,
+          1.5,
+          0
+        ]
+      }
+    },
+    {
+      "time": 1.7,
       "bones": {
         "RightUpperArm": [
           0,
@@ -82,6 +108,11 @@
           0
         ],
         "RightForeArm": [
+          0,
+          0,
+          0
+        ],
+        "RightHand": [
           0,
           0,
           0
