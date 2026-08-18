@@ -1,16 +1,7 @@
 {
   "signs": [
     { "sign": "HELLO", "status": "ready", "label": "hello - DRAFT, unverified" },
-    { "sign": "THANK-YOU", "status": "ready", "label": "thank you - DRAFT, unverified" },
     { "sign": "YES", "status": "ready", "label": "yes - DRAFT, unverified" },
-    { "sign": "NO", "status": "ready", "label": "no - DRAFT, unverified" },
-    { "sign": "GOOD", "status": "ready", "label": "good - DRAFT, unverified" },
-    { "sign": "BAD", "status": "ready", "label": "bad - DRAFT, unverified" },
-    { "sign": "SORRY", "status": "ready", "label": "sorry - DRAFT, unverified" },
-    { "sign": "DEAF", "status": "ready", "label": "deaf - DRAFT, unverified" },
-    { "sign": "HELP", "status": "ready", "label": "help - DRAFT, unverified" },
-    { "sign": "NAME", "status": "ready", "label": "name - DRAFT, unverified" },
-    { "sign": "PAY", "status": "placeholder", "label": "Placeholder - no data" },
-    { "sign": "FRIDAY", "status": "placeholder", "label": "Placeholder - no data" }
+    { "sign": "GOOD", "status": "ready", "label": "good - DRAFT, unverified" }
   ]
 }
