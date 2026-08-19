@@ -20,11 +20,17 @@ const GltfAvatar = dynamic(() => import("./GltfAvatar").then((m) => m.GltfAvatar
 
 export type AvatarSource = "checking" | "glb" | "placeholder";
 
-/** Probe for a real avatar once, and fall back quietly when there isn't one. */
+/**
+ * Forced to the placeholder stick figure for now - no .glb fetch, no load wait.
+ * Flip FORCE_PLACEHOLDER back to false to resume probing for avatar.glb.
+ */
+const FORCE_PLACEHOLDER = true;
+
 function useAvatarSource(): AvatarSource {
-  const [source, setSource] = useState<AvatarSource>("checking");
+  const [source, setSource] = useState<AvatarSource>(FORCE_PLACEHOLDER ? "placeholder" : "checking");
 
   useEffect(() => {
+    if (FORCE_PLACEHOLDER) return;
     let cancelled = false;
     fetch(AVATAR_URL, { method: "HEAD" })
       .then((response) => {
