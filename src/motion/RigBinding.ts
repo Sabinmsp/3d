@@ -3,6 +3,7 @@ import { mapSkeleton, type BoneMatch } from "./boneMap";
 import {
   AIMED_BONES,
   NEUTRAL_FINGER_POSE,
+  NEUTRAL_WRIST_TWIST,
   aimBone,
   neutralTargetFor,
 } from "./neutralPose";
@@ -38,9 +39,10 @@ export class RigBinding {
     const offset = new Quaternion();
 
     for (const match of result.matched) {
-      // Finger curl is a plain Euler offset - those axes are consistent enough
-      // across rigs to hardcode.
-      const curl = NEUTRAL_FINGER_POSE[match.canonical];
+      // Plain Euler offsets, for joints whose axes are consistent enough to
+      // hardcode: finger curl, and the wrist twist that turns the resting palms
+      // in toward the legs.
+      const curl = NEUTRAL_FINGER_POSE[match.canonical] ?? NEUTRAL_WRIST_TWIST[match.canonical];
       const restQuaternion = match.node.quaternion.clone();
 
       if (curl) {

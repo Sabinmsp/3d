@@ -2,12 +2,11 @@
 
 import { Component, Suspense, useEffect, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { AxesHelper, SkeletonHelper, type Object3D } from "three";
 import { PlaceholderAvatar } from "./PlaceholderAvatar";
 import { AVATAR_URL } from "@/avatarConfig";
-import { useEngineState, useMotionEngine } from "@/react/MotionEngineProvider";
+import { useMotionEngine } from "@/react/MotionEngineProvider";
 
 /**
  * The Three.js half of the app: renderer, camera, lights, and whichever avatar
@@ -49,37 +48,6 @@ function MotionTicker() {
   return null;
 }
 
-/**
- * Draws the live skeleton over the mesh, so a bad pose can be read as bones
- * rather than inferred from how the skin deforms.
- */
-function SkeletonOverlay() {
-  const engine = useMotionEngine();
-  const { scene } = useThree();
-  // Re-run once the rig actually binds - the avatar takes seconds to load, so
-  // this effect would otherwise fire against an empty rig and never retry.
-  const rigReport = useEngineState().rig;
-
-  useEffect(() => {
-    const rig = engine.getRig();
-    const root = rig?.all()[0]?.node;
-    if (!root) return;
-
-    // Walk to the top of the skeleton so the helper covers the whole rig.
-    let top: Object3D = root;
-    while (top.parent && (top.parent as { isBone?: boolean }).isBone) top = top.parent;
-
-    const helper = new SkeletonHelper(top);
-    scene.add(helper);
-    return () => {
-      scene.remove(helper);
-      helper.dispose();
-    };
-  }, [engine, scene, rigReport]);
-
-  return null;
-}
-
 /** A malformed .glb should degrade to the placeholder, not blank the screen. */
 class AvatarErrorBoundary extends Component<
   { children: ReactNode; onError: (message: string) => void; fallback: ReactNode },
@@ -100,45 +68,9 @@ class AvatarErrorBoundary extends Component<
   }
 }
 
-/**
- * Draws the selected bone's own X/Y/Z axes at its position, so the axis a
- * slider moves can be seen rather than inferred. Red=X, green=Y, blue=Z.
- */
-function BoneAxes() {
-  const engine = useMotionEngine();
-  const state = useEngineState();
-  const { scene } = useThree();
-
-  useEffect(() => {
-    const bone = state.debugBone;
-    const bound = bone ? engine.getRig()?.get(bone) : null;
-    if (!bound) return;
-
-    const helper = new AxesHelper(0.18);
-    // Parent to the bone itself so the axes follow it as it rotates.
-    bound.node.add(helper);
-    return () => {
-      bound.node.remove(helper);
-      helper.dispose();
-    };
-  }, [engine, scene, state.debugBone, state.rig]);
-
-  return null;
-}
-
-export function AvatarStage({
-  onSourceChange,
-  showSkeleton = false,
-}: {
-  onSourceChange?: (source: AvatarSource, error: string | null) => void;
-  showSkeleton?: boolean;
-}) {
+export function AvatarStage() {
   const source = useAvatarSource();
-  const [loadError, setLoadError] = useState<string | null>(null);
-
-  useEffect(() => {
-    onSourceChange?.(loadError ? "placeholder" : source, loadError);
-  }, [source, loadError, onSourceChange]);
+  const [, setLoadError] = useState<string | null>(null);
 
   return (
     <Canvas shadows camera={{ position: [0.4, 1.5, 2.8], fov: 45 }} dpr={[1, 2]}>
@@ -171,8 +103,6 @@ export function AvatarStage({
       </Suspense>
 
       <MotionTicker />
-      {showSkeleton && <SkeletonOverlay />}
-      <BoneAxes />
 
       {/* Inspect the arm from any angle. */}
       <OrbitControls

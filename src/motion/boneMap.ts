@@ -7,7 +7,8 @@ import { CANONICAL_BONES, type CanonicalBone } from "./types";
  *
  * Rig vendors disagree on naming: Mixamo exports "mixamorig:RightForeArm",
  * Ready Player Me exports "RightForeArm", VRM exports "rightLowerArm", Rigify
- * exports "forearm.R", Reallusion Character Creator (CC3/CC4, e.g. models
+ * exports "forearm.R", Auto-Rig Pro exports "forearm_stretch.r", Reallusion
+ * Character Creator (CC3/CC4, e.g. models
  * exported from CC/iClone) exports "CC_Base_R_Upperarm". Motion data should not
  * have to care, so each canonical bone lists the aliases we know about, most
  * specific first.
@@ -16,10 +17,10 @@ import { CANONICAL_BONES, type CanonicalBone } from "./types";
 // cannot see that every canonical key is present. isCanonicalBone() and the
 // CANONICAL_BONES list remain the source of truth for what must exist.
 const BONE_ALIASES = {
-  Hips: ["Hips", "mixamorig:Hips", "hip", "pelvis", "CC_Base_Hip"],
-  Spine: ["Spine", "mixamorig:Spine", "spine", "spine_01", "CC_Base_Spine01"],
+  Hips: ["root.x", "Hips", "mixamorig:Hips", "hip", "pelvis", "CC_Base_Hip"],
+  Spine: ["spine_01.x", "Spine", "mixamorig:Spine", "spine", "spine_01", "CC_Base_Spine01"],
   Chest: [
-    "Spine2",
+    "spine_03.x", "spine_02.x", "Spine2",
     "Spine1",
     "Chest",
     "UpperChest",
@@ -27,18 +28,18 @@ const BONE_ALIASES = {
     "spine_03",
     "CC_Base_Spine02",
   ],
-  Neck: ["Neck", "mixamorig:Neck", "neck", "CC_Base_NeckTwist01"],
-  Head: ["Head", "mixamorig:Head", "head", "CC_Base_Head"],
+  Neck: ["neck.x", "Neck", "mixamorig:Neck", "neck", "CC_Base_NeckTwist01"],
+  Head: ["head.x", "Head", "mixamorig:Head", "head", "CC_Base_Head"],
 
   LeftShoulder: [
-    "LeftShoulder",
+    "shoulder.l", "LeftShoulder",
     "shoulder.L",
     "clavicle_l",
     "leftShoulder",
     "CC_Base_L_Clavicle",
   ],
   LeftUpperArm: [
-    "LeftArm",
+    "arm_stretch.l", "LeftArm",
     "LeftUpperArm",
     "upper_arm.L",
     "upperarm_l",
@@ -46,24 +47,24 @@ const BONE_ALIASES = {
     "CC_Base_L_Upperarm",
   ],
   LeftForeArm: [
-    "LeftForeArm",
+    "forearm_stretch.l", "LeftForeArm",
     "LeftLowerArm",
     "forearm.L",
     "lowerarm_l",
     "leftLowerArm",
     "CC_Base_L_Forearm",
   ],
-  LeftHand: ["LeftHand", "hand.L", "hand_l", "leftHand", "CC_Base_L_Hand"],
+  LeftHand: ["hand.l", "LeftHand", "hand.L", "hand_l", "leftHand", "CC_Base_L_Hand"],
 
   RightShoulder: [
-    "RightShoulder",
+    "shoulder.r", "RightShoulder",
     "shoulder.R",
     "clavicle_r",
     "rightShoulder",
     "CC_Base_R_Clavicle",
   ],
   RightUpperArm: [
-    "RightArm",
+    "arm_stretch.r", "RightArm",
     "RightUpperArm",
     "upper_arm.R",
     "upperarm_r",
@@ -71,14 +72,14 @@ const BONE_ALIASES = {
     "CC_Base_R_Upperarm",
   ],
   RightForeArm: [
-    "RightForeArm",
+    "forearm_stretch.r", "RightForeArm",
     "RightLowerArm",
     "forearm.R",
     "lowerarm_r",
     "rightLowerArm",
     "CC_Base_R_Forearm",
   ],
-  RightHand: ["RightHand", "hand.R", "hand_r", "rightHand", "CC_Base_R_Hand"],
+  RightHand: ["hand.r", "RightHand", "hand.R", "hand_r", "rightHand", "CC_Base_R_Hand"],
 
   ...fingerAliases(),
 } as Record<CanonicalBone, string[]>;
@@ -92,20 +93,23 @@ const BONE_ALIASES = {
  * palm the same way.
  */
 function fingerAliases(): Record<string, string[]> {
-  const digits: [canonical: string, cc: string, mixamo: string][] = [
-    ["Thumb", "Thumb", "Thumb"],
-    ["Index", "Index", "Index"],
-    ["Middle", "Mid", "Middle"],
-    ["Ring", "Ring", "Ring"],
-    ["Pinky", "Pinky", "Pinky"],
+  const digits: [canonical: string, cc: string, mixamo: string, arp: string][] = [
+    ["Thumb", "Thumb", "Thumb", "thumb"],
+    ["Index", "Index", "Index", "index"],
+    // Character Creator abbreviates the middle finger; Auto-Rig Pro does not.
+    ["Middle", "Mid", "Middle", "middle"],
+    ["Ring", "Ring", "Ring", "ring"],
+    ["Pinky", "Pinky", "Pinky", "pinky"],
   ];
 
   const out: Record<string, string[]> = {};
   for (const side of ["Right", "Left"] as const) {
     const s = side === "Right" ? "R" : "L";
-    for (const [canonical, cc, mixamo] of digits) {
+    for (const [canonical, cc, mixamo, arp] of digits) {
       for (const joint of [1, 2, 3]) {
         out[`${side}${canonical}${joint}`] = [
+          // Auto-Rig Pro: first joint is bare, later joints carry a c_ prefix.
+          joint === 1 ? `${arp}1.${s}` : `c_${arp}${joint}.${s}`,
           `${side}Hand${mixamo}${joint}`, // Mixamo / Ready Player Me
           `CC_Base_${s}_${cc}${joint}`, // Character Creator
           `${cc.toLowerCase()}.0${joint}.${s}`, // Rigify (f_index.01.R)

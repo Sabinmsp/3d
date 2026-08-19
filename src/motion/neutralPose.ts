@@ -19,14 +19,30 @@ import type { CanonicalBone } from "./types";
  * actually points, and rotate it to point where we want. That works on any rig.
  */
 
-/** Where each arm bone should point, in world space. Y is up, +Z is forward. */
+/**
+ * Where each arm bone should point, in world space. Y is up, +Z is forward.
+ *
+ * Tuned to read as a person standing rather than a mannequin. A relaxed arm is
+ * not a straight line: the upper arm hangs close to the torso with only a small
+ * outward angle, and the forearm carries a noticeable bend forward, so the hands
+ * sit just ahead of the thighs rather than pinned flat against them.
+ */
 const ARM_TARGETS: Partial<Record<CanonicalBone, [number, number, number]>> = {
-  // Slightly away from the torso so the arms do not intersect the body.
-  RightUpperArm: [0.2, -1, 0.02],
-  // A real relaxed arm carries a slight elbow bend, angled a little forward.
-  RightForeArm: [0.13, -1, 0.16],
-  LeftUpperArm: [-0.2, -1, 0.02],
-  LeftForeArm: [-0.13, -1, 0.16],
+  RightUpperArm: [0.13, -1, 0.06],
+  RightForeArm: [0.1, -1, 0.3],
+  LeftUpperArm: [-0.13, -1, 0.06],
+  LeftForeArm: [-0.1, -1, 0.3],
+};
+
+/**
+ * Resting palm direction. Hands hang with the palms turned in toward the legs -
+ * left flat against the thigh or rolled outward both read as stiff.
+ * Applied as a twist on the wrist, which is the axis that controls palm
+ * direction on this rig (see rigCalibration.ts).
+ */
+export const NEUTRAL_WRIST_TWIST: Partial<Record<CanonicalBone, [number, number, number]>> = {
+  RightHand: [0, 1.2, 0],
+  LeftHand: [0, -1.2, 0],
 };
 
 /**
